@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sidan_app/CartOne.dart';
 import 'package:sidan_app/MyDart.dart';
@@ -146,7 +147,8 @@ class _DashBoardState extends State<DashBoard> {
                       BorderRadius.only(topLeft: Radius.circular(75.0)),
                 ),
                 height: MediaQuery.of(context).size.height - 296.0,
-                child: StreamBuilder<QuerySnapshot>(
+                child: //DOOM
+                StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('service_type')
                       .snapshots(),
@@ -158,10 +160,21 @@ class _DashBoardState extends State<DashBoard> {
                       return ListView(
                           children: documents
                               .map(
-                                (service_type) => Card(
-                                    child: Column(
+                                (service_type) => Container(
+                                child: Column(
                                   children: [
-                                    Text(service_type['name']),
+                                    SizedBox(height: 10,),
+                                    Row(
+                                      children: [
+                                        Text(service_type['name'],
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16.0,
+                                            )
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10,),
                                     StreamBuilder(
                                       stream: getService(service_type.id),
                                       builder: (BuildContext context,
@@ -171,35 +184,62 @@ class _DashBoardState extends State<DashBoard> {
                                         if (!snapshot.hasData)
                                           return CircularProgressIndicator();
 
-                                        return ListView(
-                                          shrinkWrap: true,
+                                        return Column(
                                           children: snapshot.data
-                                              .map((item) => ListTile(
-                                                  title:
-                                                      Text(item.id.toString()),
-                                                  subtitle: FlatButton(
-                                                      onPressed: () {
-
-                                                        Navigator.of(context).push(MaterialPageRoute(builder: (_){
-                                                          return CartOne(id:item.id,serviceName:item['name']);
-                                                        }));
-
-                                                      },
-                                                      child: Text(item['name']
-                                                          .toString()))))
+                                              .map((item) => SizedBox(
+                                                width: 320,
+                                                height: 200,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                                                      return CartOne(id:item.id,serviceName:item['name']);
+                                                    }));
+                                                  },
+                                                  child: Card(
+                                             child: Column(
+                                                   children: [
+                                                     Row(
+                                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                       children: [
+                                                         Padding(
+                                                           padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
+                                                           child: Container(
+                                                             decoration: BoxDecoration(
+                                                               color: Color(0xffdbdbdb).withOpacity(0.3),
+                                                               borderRadius: BorderRadius.circular(100),
+                                                             ),
+                                                             child: SizedBox(
+                                                               width: 90,
+                                                               height: 90,
+                                                               child: Container(
+                                                                 child: Image.network(item['icon']),
+                                                               ),
+                                                             ),
+                                                           ),
+                                                         ),
+                                                         Text(
+                                                             item['name'],
+                                                             style: TextStyle(
+                                                               color: Colors.black,
+                                                               fontSize: 16.0,
+                                                             )
+                                                         ),
+                                                       ],
+                                                     ),
+                                                     Text(item['description'])
+                                                   ],
+                                             ),
+                                          ),
+                                                ),
+                                              )
+                                          )
                                               .toList(),
                                         );
                                       },
                                     ),
-                                    // ListTile(
-                                    //   title: Text(service_type['name']),
-                                    //   subtitle: Text(result.data),
-                                    //
-                                    //
-                                    // ),
                                   ],
                                 )),
-                              )
+                          )
                               .toList());
                     } else if (snapshot.hasError) {
                       return Text('Its Error!');
@@ -208,56 +248,6 @@ class _DashBoardState extends State<DashBoard> {
                 ),
               ),
             ),
-
-            // Padding(
-            //   padding: EdgeInsets.fromLTRB(20, 0, 0, 5),
-            //   child: Container(
-            //     height: MediaQuery.of(context).size.height - 700.0,
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //       children: [
-            //         Padding(
-            //           padding: EdgeInsets.fromLTRB(25, 0, 0, 20),
-            //           child: Column(
-            //             children: [
-            //               Icon(
-            //                 Icons.home,
-            //                 color: Colors.white,
-            //                 size: 25.0,
-            //               ),
-            //               Text(
-            //                   'Home',
-            //                   style: TextStyle(
-            //                     color: Colors.white,
-            //                     fontSize: 12.0,
-            //                   )
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            //         Padding(
-            //           padding: EdgeInsets.fromLTRB(0, 0, 25, 20),
-            //           child: Column(
-            //             children: [
-            //               Icon(
-            //                 Icons.shopping_basket,
-            //                 color: Colors.white,
-            //                 size: 25.0,
-            //               ),
-            //               Text(
-            //                   'Orders',
-            //                   style: TextStyle(
-            //                     color: Colors.white,
-            //                     fontSize: 12.0,
-            //                   )
-            //               ),
-            //             ],
-            //           ),
-            //         )
-            //       ],
-            //     ),
-            //   ),
-            // ),
             SizedBox(
               height: 10,
             ),

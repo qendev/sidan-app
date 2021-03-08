@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sidan_app/MyDart.dart';
 import 'package:sidan_app/OrderStatus.dart';
+import 'package:sidan_app/ScheduleOrder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
@@ -100,22 +101,118 @@ class _CartOneState extends State<CartOne> {
                             if (!snapshot.hasData)
                               return CircularProgressIndicator();
 
-                            return ListView(
-                              shrinkWrap: true,
-                              children: snapshot.data
-                                  .map((item) =>
-                                  ListTile(
-                                  title: Text(item['price']),
-                                  subtitle: FlatButton(
-
-                                      child: Column(
-                                        children: [
-                                          Text(item['name']),
-                                          Image.network(item['icon'])
-                                        ],
-                                      )
-                                  )))
-                                  .toList(),
+                            return Padding(
+                              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                              child: SizedBox(
+                                height: 100,
+                                width: 350,
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  children: snapshot.data
+                                      .map((item) => Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    color: Colors.white,
+                                    elevation: 2.0,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        SizedBox(
+                                          width: 60,
+                                          height: 55,
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                                child:
+                                                  Image.network(item['icon']),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(width: 6,),
+                                        Text(item['name']),
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                                height: 25,
+                                                width: 25,
+                                                child: RawMaterialButton(
+                                                  onPressed: () {},
+                                                  elevation: 0,
+                                                  fillColor: Color(0xffFFA451).withOpacity(0.5),
+                                                  child: Text(
+                                                      '+',
+                                                      style: TextStyle(
+                                                        color: Color(0xffFFA451),
+                                                        fontSize: 20.0,
+                                                      )
+                                                  ),
+                                                  shape: CircleBorder(),
+                                                )
+                                            ),
+                                            SizedBox(width: 5,),
+                                            Text(
+                                                '3',
+                                                style: TextStyle(
+                                                  color: Colors.grey.shade700,
+                                                  fontSize: 15.0,
+                                                )
+                                            ),
+                                            SizedBox(width: 5,),
+                                            SizedBox(
+                                              height: 25,
+                                              width: 25,
+                                              child: Padding(
+                                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                  child: RawMaterialButton(
+                                                    onPressed: () {},
+                                                    elevation: 0,
+                                                    fillColor: Color(0xffFFA451).withOpacity(0.5),
+                                                    child: Text(
+                                                        '-',
+                                                        style: TextStyle(
+                                                          color: Color(0xffFFA451),
+                                                          fontSize: 20.0,
+                                                        )
+                                                    ),
+                                                    shape: CircleBorder(),
+                                                  )
+                                              ),
+                                            ),
+                                            SizedBox(width: 5,),
+                                            Padding(
+                                              padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                              child: Text(
+                                                'Kshs. '+item['price']+'',
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontSize: 15.0,
+                                                  )
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                      // ListTile(
+                                      // title: Text(item['price']),
+                                      // subtitle: FlatButton(
+                                      //
+                                      //     child: Column(
+                                      //       children: [
+                                      //         Text(item['name']),
+                                      //         Image.network(item['icon'])
+                                      //       ],
+                                      //     )
+                                      // )
+                                      // )
+                                  )
+                                      .toList(),
+                                ),
+                              ),
                             );
                           },
                         ),
@@ -179,7 +276,7 @@ class _CartOneState extends State<CartOne> {
                           onPressed: () async {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => OrderStatus()),
+                              MaterialPageRoute(builder: (context) => ScheduleOrder()),
                             );
                           },
                           child:

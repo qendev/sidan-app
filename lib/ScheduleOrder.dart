@@ -15,6 +15,7 @@ class ScheduleOrder extends StatefulWidget {
 }
 
 class _ScheduleOrderState extends State<ScheduleOrder> {
+  DateTime selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,12 +24,12 @@ class _ScheduleOrderState extends State<ScheduleOrder> {
         decoration: BoxDecoration(
           color: Color(0xff006DFF),
         ),
-        child: Column(
+        child: ListView(
           children: [
             Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(10, 50, 0, 0),
+                  padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
                   child: IconButton(
                     icon: Icon(Icons.arrow_back),
                     color: Colors.white,
@@ -55,8 +56,8 @@ class _ScheduleOrderState extends State<ScheduleOrder> {
             ),
             SizedBox(height: 20,),
             Container(
-              height: MediaQuery.of(context).size.height - 200.0,
-              child: ListView(
+              height: MediaQuery.of(context).size.height - 100.0,
+              child: Column(
                 children: [
                   Column(
                     children: [
@@ -81,10 +82,24 @@ class _ScheduleOrderState extends State<ScheduleOrder> {
                               ),
                               Padding(
                                 padding: EdgeInsets.fromLTRB(20, 0, 70, 0),
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                      labelText: 'LOCATION'
-                                  ),
+                                child: FlatButton(
+                                  onPressed: () {
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => PlacePicker(
+                                    //       apiKey: APIKeys.apiKey,   // Put YOUR OWN KEY here.
+                                    //       onPlacePicked: (result) {
+                                    //         print(result.address);
+                                    //         Navigator.of(context).pop();
+                                    //       },
+                                    //       initialPosition: HomePage.kInitialPosition,
+                                    //       useCurrentLocation: true,
+                                    //     ),
+                                    //   ),
+                                    // );
+                                  },
+                                  child: Text('Location'),
                                 ),
                               ),
                               Padding(
@@ -123,9 +138,11 @@ class _ScheduleOrderState extends State<ScheduleOrder> {
                                 children: [
                                   SizedBox(
                                     width: 100,
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          labelText: 'DAY.'
+                                    child: FlatButton(
+                                      onPressed: () => _selectDate(context),
+                                      child: Icon(
+                                        Icons.date_range,
+                                        color: Colors.grey,
                                       ),
                                     ),
                                   ),
@@ -183,7 +200,7 @@ class _ScheduleOrderState extends State<ScheduleOrder> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                         child: SizedBox(
                           width: 320.0,
                           height: 50.0,
@@ -223,5 +240,17 @@ class _ScheduleOrderState extends State<ScheduleOrder> {
         ),
       ),
     );
+  }
+  _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
   }
 }
