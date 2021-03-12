@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sidan_app/MyBasket.dart';
 
 import 'CartOne.dart';
 
@@ -31,6 +32,8 @@ class _DashBoardState extends State<DashBoard> {
 
   int counter = 0;
   int selectedIndex = 1;
+
+  get user => null;
 
   void ItemTapped(int index) {
     setState(() {
@@ -88,10 +91,18 @@ class _DashBoardState extends State<DashBoard> {
                           // });
                           getServices();
                         },
-                        child: Icon(
-                          Icons.shopping_basket,
-                          color: Colors.orangeAccent,
-                          size: 30.0,
+                        child: TextButton(
+                        onPressed: (){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                            return ScheduleOrder();
+                          }));
+
+                        },
+                          child: Icon(
+                            Icons.shopping_basket,
+                            color: Colors.orangeAccent,
+                            size: 30.0,
+                          ),
                         ),
                       ),
                     ],
@@ -337,3 +348,4 @@ class _DashBoardState extends State<DashBoard> {
     }
   }
 }
+
