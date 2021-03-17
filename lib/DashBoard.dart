@@ -125,7 +125,7 @@ class _DashBoardState extends State<DashBoard> {
                     height: 50,
                     child: TextField(
                       // controller: _passwordController,
-                      obscureText: true,
+                      obscureText: false,
                       style: TextStyle(fontSize: 14, color: Colors.black),
                       decoration: InputDecoration(
                         // keyboardType: TextInputType.number,
