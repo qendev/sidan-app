@@ -27,22 +27,21 @@ class _ScheduleOrderState extends State<ScheduleOrder> {
   PickResult selectedPlace;
 
 
-  //to dispaly date
-  DateTime selectedDate = DateTime.now();
+  //use DateTime object to get current.
+  DateTime currentDate = DateTime.now();
 
-  _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked != selectedDate)
+  //create a new DatePicker
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime pickedDate = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(5000));
+    if (pickedDate != null && pickedDate != currentDate)
       setState(() {
-        selectedDate = picked;
+        currentDate = pickedDate;
       });
   }
-
   //to display time
   TimeOfDay selectedTime = TimeOfDay.now();
 
@@ -118,7 +117,7 @@ class _ScheduleOrderState extends State<ScheduleOrder> {
     Row(
     children: [
     Padding(
-    padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
+    padding: EdgeInsets.fromLTRB(6, 20, 0, 0),
     child: Text(
     'Add address and Contact Details',
     style: TextStyle(
@@ -129,101 +128,48 @@ class _ScheduleOrderState extends State<ScheduleOrder> {
     ],
     ),
 
-    Row(
-    children: [
-
-    Padding(
-    padding: EdgeInsets.fromLTRB(22, 0, 70, 0),
-    child: Text('Location:',
-    style: TextStyle(color: Colors.grey[700]),),
-    ),
-
-    Padding(
-    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-    child: FlatButton(
-    onPressed: () {
-    print('MAP CLICKED');
-    Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (context) {
-    return PlacePicker(
-    apiKey: "AIzaSyACm1zfEZtKj78i47eKVaru5Pc3HI2refA",
-    initialPosition: ScheduleOrder.kInitialPosition,
-    useCurrentLocation: true,
-    selectInitialPosition: true,
-
-    //usePlaceDetailSearch: true,
-    onPlacePicked: (result) {
-    selectedPlace = result;
-    Navigator.of(context).pop();
-    setState(() {});
-    },
-    //forceSearchOnZoomChanged: true,
-    //automaticallyImplyAppBarLeading: false,
-    //autocompleteLanguage: "ko",
-    //region: 'au',
-    //selectInitialPosition: true,
-    // selectedPlaceWidgetBuilder: (_, selectedPlace, state, isSearchBarFocused) {
-    //   print("state: $state, isSearchBarFocused: $isSearchBarFocused");
-    //   return isSearchBarFocused
-    //       ? Container()
-    //       : FloatingCard(
-    //           bottomPosition: 0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
-    //           leftPosition: 0.0,
-    //           rightPosition: 0.0,
-    //           width: 500,
-    //           borderRadius: BorderRadius.circular(12.0),
-    //           child: state == SearchingState.Searching
-    //               ? Center(child: CircularProgressIndicator())
-    //               : RaisedButton(
-    //                   child: Text("Pick Here"),
-    //                   onPressed: () {
-    //                     // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
-    //                     //            this will override default 'Select here' Button.
-    //                     print("do something with [selectedPlace] data");
-    //                     Navigator.of(context).pop();
-    //                   },
-    //                 ),
-    //         );
-    // },
-    // pinBuilder: (context, state) {
-    //   if (state == PinState.Idle) {
-    //     return Icon(Icons.favorite_border);
-    //   } else {
-    //     return Icon(Icons.favorite);F
-    //   }
-    // },
-    );
-    },
-    ),
-
-    );
-
-
-    },
-    child: Container(
-      margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
-      child: Column(
+    Container(
+    margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
+      child: Row(
       children: [
-      Icon(
-      Icons.location_on_rounded
+
+      Row(
+        children: [
+
+           Container(
+
+             child: Text('Location:',
+               style: TextStyle(color: Colors.grey[700]),),
+               margin:EdgeInsets.fromLTRB(6, 0, 0, 0) ,
+           ),
+           FlatButton(
+             onPressed: (){
+               openMap();
+             },
+             child: Icon(
+              Icons.location_on_rounded
+          ),
+           ),
+          selectedPlace == null ? Container() : Text(selectedPlace.formattedAddress ?? ""),
+
+
+
+
+
+
+
+
+        ],
       ),
-      selectedPlace == null ? Container(margin: EdgeInsets.fromLTRB(0, 8, 32, 0),) : Text(selectedPlace.formattedAddress ?? "")
+
 
 
       ],
       ),
     ),
-    ),
-    ),
-
-
-    ],
-    ),
 
     Padding(
-    padding: EdgeInsets.fromLTRB(20, 0, 70, 0),
+    padding: EdgeInsets.fromLTRB(6, 0, 70, 0),
     child: TextFormField(
     decoration: InputDecoration(
     labelText: 'HOUSE NO.'
@@ -264,32 +210,70 @@ class _ScheduleOrderState extends State<ScheduleOrder> {
     width: 100,
     child: FlatButton(
     onPressed: () => _selectDate(context),
-    child: Container(
-    margin: EdgeInsets.fromLTRB(2.0, 0, 0, 0),
-    child: Icon(
-    Icons.date_range,
-    size: 32.0,
-    color: Colors.grey,
-    ),
+    child: Column(
+    children: [
+
+       Container(
+        margin: EdgeInsets.fromLTRB(2.0, 0, 0, 0),
+        child: Icon(
+          Icons.date_range,
+          size: 32.0,
+          color: Colors.grey,
+        ),
+      ),
+
+      SizedBox(
+        height: 4.0,
+      ),
+
+
+      Text(currentDate.toString()),
+
+
+
+    ],
     ),
     ),
     ),
     SizedBox(
     width: 100,
-    child: Container(
-    margin: EdgeInsets.fromLTRB(0, 0, 70.0, 0),
-    child: TextButton(
-    onPressed: (){
-    print('TIME CLICKED');
-    _selectTime(context);
+    child: Column(
+    children: [
 
-    },
-    child: Icon(
-    Icons.timer,
-    size: 32.0,
-    color: Colors.grey,
-    ),
-    ),
+      Container(
+        margin: EdgeInsets.fromLTRB(0, 0, 40, 0),
+        child: FlatButton(
+          onPressed: (){
+            print('TIME CLICKED');
+            _selectTime(context);
+
+          },
+          child: Icon(
+            Icons.timer,
+            size: 32.0,
+            color: Colors.grey,
+          ),
+
+
+
+
+
+
+
+        ),
+      ),
+
+      SizedBox(
+        height: 4.0,
+      ),
+
+
+      Container(
+      margin: EdgeInsets.fromLTRB(0, 0, 56, 0),
+          child: Text(selectedTime.toString()))
+
+
+    ],
     ),
     ),
     ],
@@ -386,6 +370,65 @@ class _ScheduleOrderState extends State<ScheduleOrder> {
 
   void openLocation() {
 
+
+  }
+
+  void openMap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return PlacePicker(
+            apiKey: "AIzaSyACm1zfEZtKj78i47eKVaru5Pc3HI2refA",
+            initialPosition: ScheduleOrder.kInitialPosition,
+            useCurrentLocation: true,
+            selectInitialPosition: true,
+
+            //usePlaceDetailSearch: true,
+            onPlacePicked: (result) {
+              selectedPlace = result;
+              Navigator.of(context).pop();
+              setState(() {});
+            },
+            //forceSearchOnZoomChanged: true,
+            //automaticallyImplyAppBarLeading: false,
+            //autocompleteLanguage: "ko",
+            //region: 'au',
+            //selectInitialPosition: true,
+            // selectedPlaceWidgetBuilder: (_, selectedPlace, state, isSearchBarFocused) {
+            //   print("state: $state, isSearchBarFocused: $isSearchBarFocused");
+            //   return isSearchBarFocused
+            //       ? Container()
+            //       : FloatingCard(
+            //           bottomPosition: 0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+            //           leftPosition: 0.0,
+            //           rightPosition: 0.0,
+            //           width: 500,
+            //           borderRadius: BorderRadius.circular(12.0),
+            //           child: state == SearchingState.Searching
+            //               ? Center(child: CircularProgressIndicator())
+            //               : RaisedButton(
+            //                   child: Text("Pick Here"),
+            //                   onPressed: () {
+            //                     // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
+            //                     //            this will override default 'Select here' Button.
+            //                     print("do something with [selectedPlace] data");
+            //                     Navigator.of(context).pop();
+            //                   },
+            //                 ),
+            //         );
+            // },
+            // pinBuilder: (context, state) {
+            //   if (state == PinState.Idle) {
+            //     return Icon(Icons.favorite_border);
+            //   } else {
+            //     return Icon(Icons.favorite);
+            //   }
+            // },
+          );
+        },
+      ),
+    );
 
   }
 
